@@ -1,4 +1,4 @@
-package com.interview.tictactoe;
+package com.interview.tictactoe.state;
 
 import org.springframework.data.redis.core.RedisHash;
 
