@@ -17,6 +17,7 @@ public class GameStateController {
         this.gameStateService = gameStateService;
     }
 
+    @CrossOrigin(origins = "*")
     @PostMapping("/gamestate/init")
     @ResponseBody
     public GameState init(@RequestBody GameInitRequest gameInitRequest){
@@ -35,6 +36,8 @@ public class GameStateController {
         return retrieved;
     }
 
+
+    @CrossOrigin(origins = "*")
     @PostMapping("/gamestate/move")
     @ResponseBody
     public GameState move(@RequestBody GameMoveRequest gameMoveRequest) {
@@ -79,6 +82,8 @@ public class GameStateController {
         return retrievedState;
     }
 
+
+    @CrossOrigin(origins = "*")
     @GetMapping("/gamestate/{id}")
     @ResponseBody
     public GameState get(@PathVariable(name="id", required=true) String id) {
