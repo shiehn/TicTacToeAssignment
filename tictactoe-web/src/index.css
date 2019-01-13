@@ -1,0 +1,104 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.page-wrapper {
+  /* background-color: green; */
+}  
+
+.content { 
+  /* background-color: blue;  */
+  position:absolute; 
+  left:0; right:0;
+  top:0; bottom:0;
+  margin:auto; 
+}
+
+.title {
+  font-size: 4em;
+  text-align: center;
+  width: 100%;
+}
+
+#playerNameInputPanel {
+  padding: 5%;
+  width: 70%;
+  height: 20%;
+  border-radius: 25px;
+  background-color: lightgrey;
+  position: absolute;
+  position:absolute; 
+  left:0; right:0;
+  top:-20%; bottom:0;
+  margin:auto; 
+}
+
+.inputTitle {
+  display: block;
+  font-size: 140%;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 5%;
+}
+
+.inputLabels {
+  font-size: 160%;
+  font-weight: bold;
+}
+
+.inputFields {
+  width: 80%;
+  height: 2em; 
+}
+
+.inputButtonWrapper{
+  width: 100%;
+  height: 20%;
+  margin-top: 1em; 
+  text-align: center; 
+}
+
+.inputButton { 
+  margin:auto;
+  width: 100%;
+  height: 100%;
+  font-size: 2em; 
+  background-color: green;
+}
+
+#board { 
+}
+
+table {
+  border-collapse: collapse;
+}
+td {
+  border: 6px solid #222;
+}
+td:first-of-type {
+  border-left-color: transparent;
+  border-top-color: transparent;
+}
+td:nth-of-type(2) {
+  border-top-color: transparent;
+}
+td:nth-of-type(3) {
+  border-right-color: transparent;
+  border-top-color: transparent;
+}
+tr:nth-of-type(3) td {
+  border-bottom-color: transparent;
+}
+
+.hidden { display:none; }
