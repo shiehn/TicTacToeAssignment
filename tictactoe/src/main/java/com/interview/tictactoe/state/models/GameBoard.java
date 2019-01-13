@@ -28,7 +28,7 @@ public class GameBoard implements Serializable {
         return this.board;
     }
 
-    public HashMap<String, String> update(String player, String position){
+    public HashMap<String, String> update(String player, String position) throws RuntimeException {
         if(!supportedMoves.contains(position.toLowerCase())){
             throw new RuntimeException("unsupported location");
         }

@@ -2,6 +2,7 @@ package com.interview.tictactoe.state;
 
 import com.interview.tictactoe.dal.GameStateService;
 import com.interview.tictactoe.state.models.GameInitRequest;
+import com.interview.tictactoe.state.models.GameMoveRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +20,14 @@ public class GameStateController {
     @PostMapping("/gamestate/init")
     @ResponseBody
     public GameState init(@RequestBody GameInitRequest gameInitRequest){
-
-    // ACCEPTS
-        // player A
-        // player B
-
-        //create users
-
-        //RETURNS NEW GAME STATE
         GameState gameState = new GameState(
                 gameInitRequest.getPlayera(), gameInitRequest.getPlayerb());
+
+        if(gameInitRequest.getPlayera() == null || gameInitRequest.getPlayera().isEmpty() || gameInitRequest.getPlayerb() == null || gameInitRequest.getPlayerb().isEmpty()){
+            gameState.setError("please provide player names");
+            return gameState;
+        }
+
         gameStateService.save(gameState);
 
         GameState retrieved = gameStateService.findById(gameState.getGameId());
@@ -36,24 +35,48 @@ public class GameStateController {
         return retrieved;
     }
 
-    @GetMapping("/gamestate/")
+    @PostMapping("/gamestate/move")
     @ResponseBody
-    public GameState post(@RequestAttribute(name="id", required=true) String id) {
-        // ACCEPTS
-        // gamestate
+    public GameState move(@RequestBody GameMoveRequest gameMoveRequest) {
+        GameState retrievedState = gameStateService.findById(gameMoveRequest.getId());
 
-        // validate
-        // game exists
-        // game is not complete
-        // users are correct
+        if(retrievedState == null){
+            GameState gameState = new GameState("", "");
+            gameState.setError("game not found");
+            return gameState;
+        }
 
-        // move is valid
+        if(retrievedState.isCompleted()){
+            retrievedState.setError("game completed");
+            return retrievedState;
+        }
 
-        //check for winner
+        if(!retrievedState.getMove().equalsIgnoreCase(gameMoveRequest.getPlayer())){
+            retrievedState.setError("its " + retrievedState.getMove() + "'s turn");
+            return retrievedState;
+        }
 
-        GameState retrieved = gameStateService.findById(id);
+        try {
+            retrievedState.getBoard().update(gameMoveRequest.getPlayer(), gameMoveRequest.getPosition());
+            if(retrievedState.getPlayerA().equalsIgnoreCase(retrievedState.getMove())){
+                retrievedState.setMove(retrievedState.getPlayerB());
+            }else{
+                retrievedState.setMove(retrievedState.getPlayerA());
+            }
+        }catch (Exception e){
+            retrievedState.setError(e.getMessage());
+            return retrievedState;
+        }
 
-        return retrieved;
+        String winner = retrievedState.getBoard().checkForWinner();
+        if(winner != null){
+            retrievedState.setWinner(winner);
+            retrievedState.setCompleted(true);
+        }
+
+        this.gameStateService.save(retrievedState);
+
+        return retrievedState;
     }
 
     @GetMapping("/gamestate/{id}")

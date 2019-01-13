@@ -1,6 +1,5 @@
 package com.interview.tictactoe.state.models;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;

@@ -1,10 +1,9 @@
 package com.interview.tictactoe.state;
 
+import com.interview.tictactoe.state.models.GameBoard;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @RedisHash("GameState")
@@ -14,25 +13,21 @@ public class GameState implements Serializable {
     private String playerB;
     private String move;
     private boolean completed;
-    private List<List<String>> board;
+    private String winner;
+    private String error;
+    private GameBoard board;
 
     public GameState(String playerA, String playerB) {
         this.id = UUID.randomUUID().toString();
         this.playerA = playerA;
         this.playerB = playerB;
 
+        this.setMove(playerA);
         this.initalizeBoard();
     }
 
     private void initalizeBoard(){
-        List<String> rowA = new ArrayList<>();
-        List<String> rowB = new ArrayList<>();
-        List<String> rowC = new ArrayList<>();
-
-        this.board = new ArrayList<>();
-        this.board.add(rowA);
-        this.board.add(rowB);
-        this.board.add(rowC);
+        board = new GameBoard();
     }
 
     public String getGameId() {
@@ -75,11 +70,23 @@ public class GameState implements Serializable {
         this.completed = completed;
     }
 
-    public List<List<String>> getBoard() {
+    public GameBoard getBoard() {
         return board;
     }
 
-    public void setBoard(List<List<String>> board) {
-        this.board = board;
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }
