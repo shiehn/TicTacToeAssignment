@@ -4,9 +4,11 @@ import axios from 'axios';
 import './App.css';
 
 class App extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
+      baseurl: 'http://localhost:4444', 
       displayGameInit: true,
       width:  0,
       height: 0,
@@ -45,7 +47,7 @@ class App extends Component {
 
   handleGameInit() {
     var self = this;
-    axios.post('http://localhost:4444/gamestate/init', {
+    axios.post(this.state.baseurl + '/gamestate/init', {
       playera: this.state.playerX,
       playerb: this.state.playerO,
     })
@@ -94,7 +96,7 @@ class App extends Component {
       currentMove = this.state.move;
     }
     var self = this;
-    axios.post('http://localhost:4444/gamestate/move', { 
+    axios.post(this.state.baseurl + '/gamestate/move', { 
       id: this.state.gameId,
       player: currentMove,
       position: position,
