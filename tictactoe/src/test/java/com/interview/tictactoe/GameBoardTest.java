@@ -1,6 +1,5 @@
-package com.interview.tictactoe.models;
+package com.interview.tictactoe;
 
-import com.interview.tictactoe.GameBoard;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class GameBoardTest {
         board.getBoard().put("c1", "playerB");
         board.getBoard().put("c2", "playerB");
 
-        assertThat(this.board.checkForWinner()).isNull();
+        assertThat(this.board.checkForTieOrWinner()).isNull();
     }
 
     @Test
@@ -63,7 +62,7 @@ public class GameBoardTest {
 
         board.getBoard().put("c1", "otherPlayer");
 
-        assertThat(this.board.checkForWinner()).isEqualToIgnoringCase("playerA");
+        assertThat(this.board.checkForTieOrWinner()).isEqualToIgnoringCase("playerA");
     }
 
     @Test
@@ -76,7 +75,7 @@ public class GameBoardTest {
 
         board.getBoard().put("c1", "otherPlayer");
 
-        assertThat(this.board.checkForWinner()).isEqualToIgnoringCase("playerB");
+        assertThat(this.board.checkForTieOrWinner()).isEqualToIgnoringCase("playerB");
     }
 
     @Test
@@ -89,8 +88,25 @@ public class GameBoardTest {
 
         board.getBoard().put("a1", "otherPlayer");
 
-        assertThat(this.board.checkForWinner()).isEqualToIgnoringCase("playerC");
+        assertThat(this.board.checkForTieOrWinner()).isEqualToIgnoringCase("playerC");
     }
 
+    @Test
+    public void returnsTie(){
+        setup();
 
+        board.getBoard().put("a0", "playerA");
+        board.getBoard().put("a1", "playerC");
+        board.getBoard().put("a2", "playerA");
+
+        board.getBoard().put("b0", "playerA");
+        board.getBoard().put("b1", "playerC");
+        board.getBoard().put("b2", "playerC");
+
+        board.getBoard().put("c0", "playerC");
+        board.getBoard().put("c1", "playerA");
+        board.getBoard().put("c2", "playerA");
+
+        assertThat(this.board.checkForTieOrWinner()).isEqualToIgnoringCase("tie");
+    }
 }

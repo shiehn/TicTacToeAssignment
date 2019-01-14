@@ -108,11 +108,6 @@ class App extends Component {
         return;
       }
 
-      if(response.data.winner){
-        alert(response.data.winner + ' is the winner!');
-        return;
-      }
-
       self.setState(state => ({
         playerX: response.data.playerA,
         playerO: response.data.playerB,
@@ -127,7 +122,15 @@ class App extends Component {
         c1: self.getXorO(response.data.board.board.c1),
         c2: self.getXorO(response.data.board.board.c2), 
       }));
-      console.log(response);
+
+      if(response.data.winner){ 
+        if(response.data.winner === 'Tie Game!'){ 
+          alert(response.data.winner); 
+        }else{
+          alert(response.data.winner + ' is the WINNER!'); 
+        }
+        return;
+      }  
     })
     .catch(function (error) {
       console.log(error);
@@ -164,6 +167,10 @@ class App extends Component {
           <h1 className="title">Tic Tac Toe</h1> 
           <div className="subTitle">Stephen Hiehn technical assignment</div>
 
+          <div id="playerTurnMsg" className={!this.state.displayGameInit ? '' : 'hidden'}>
+              Its <b>{this.state.move}</b>'s turn
+          </div>
+
           <div id="playerNameInputPanel" className={this.state.displayGameInit ? '' : 'hidden'}>
             <span className="inputTitle">Enter player's Names:</span><br />
             <form>
@@ -195,12 +202,7 @@ class App extends Component {
                   <td onClick={() => this.handleGameMove('c2')}>{this.state.c2}</td>
                 </tr>
               </tbody>
-            </table> 
- 
-            <div id="playerTurnMsg" className={!this.state.displayGameInit ? '' : 'hidden'}>
-              Its <b>{this.state.move}</b>'s turn
-            </div>
-
+            </table>  
         </div> 
       </div>
     );

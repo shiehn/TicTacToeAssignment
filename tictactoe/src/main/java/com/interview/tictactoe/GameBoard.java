@@ -43,7 +43,7 @@ public class GameBoard implements Serializable {
         return this.getBoard();
     }
 
-    public String checkForWinner(){
+    public String checkForTieOrWinner(){
         for(List<String> combos : getWinningCombos()){
 
             String winner = getBoard().get(combos.get(0));
@@ -57,6 +57,19 @@ public class GameBoard implements Serializable {
                         return winner;
                     }
                 }
+        }
+
+        if(getBoard().get("a0")!=null &&
+                getBoard().get("a1")!=null &&
+                getBoard().get("a2")!=null &&
+                getBoard().get("b0")!=null &&
+                getBoard().get("b1")!=null &&
+                getBoard().get("b2")!=null &&
+                getBoard().get("c0")!=null &&
+                getBoard().get("c1")!=null &&
+                getBoard().get("c2")!=null
+                ){
+            return "tie";
         }
 
         return null;
