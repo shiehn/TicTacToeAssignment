@@ -34,7 +34,8 @@ public class GameBoard implements Serializable {
         }
 
         if(this.getBoard().get(position) != null) {
-            return this.getBoard();
+            throw new RuntimeException("invalid position");
+            //return this.getBoard();
         }
 
         this.getBoard().put(position, player);

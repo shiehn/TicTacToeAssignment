@@ -11,7 +11,11 @@ class App extends Component {
       width:  0,
       height: 0,
       contentWidth: 0,
+      gameId: "",
       showBoard: false,
+      move: "",
+      playerX: "",
+      playerO: "",
       a0: null,
       a1: null,
       a2: null,
@@ -21,9 +25,12 @@ class App extends Component {
       c0: null,
       c1: null,
       c2: null,
-    }; 
-    // This binding is necessary to make `this` work in the callback
+    };  
+
     this.handleGameInit = this.handleGameInit.bind(this);
+    this.handleGameMove = this.handleGameMove.bind(this);
+    this.updatePlayerXInput = this.updatePlayerXInput.bind(this);
+    this.updatePlayerOInput = this.updatePlayerOInput.bind(this);
   }
 
   updateDimensions() { 
@@ -37,24 +44,105 @@ class App extends Component {
   }
 
   handleGameInit() {
-    this.setState(state => ({
-      displayGameInit: !state.displayGameInit
-    }));
-asdfasdf
     var self = this;
     axios.post('http://localhost:4444/gamestate/init', {
-      playera: 'Fred',
-      playerb: 'Flintstone'
+      playera: this.state.playerX,
+      playerb: this.state.playerO,
     })
     .then(function (response) {
+      if(response.data.error){
+        alert(response.data.error)
+        return;
+      }
+ 
       self.setState(state => ({
-        a0: response.data.board.board.a0
+        gameId: response.data.gameId,
+        playerX: response.data.playerA,
+        playerO: response.data.playerB,
+        displayGameInit: false,
+        move: response.data.move,
+        a0: self.getXorO(response.data.board.board.a0),
+        a1: self.getXorO(response.data.board.board.a1),
+        a2: self.getXorO(response.data.board.board.a2),
+        b0: self.getXorO(response.data.board.board.b0),
+        b1: self.getXorO(response.data.board.board.b1),
+        b2: self.getXorO(response.data.board.board.b2),
+        c0: self.getXorO(response.data.board.board.c0),
+        c1: self.getXorO(response.data.board.board.c1),
+        c2: self.getXorO(response.data.board.board.c2),
       }));
       console.log(response);
     })
     .catch(function (error) {
       console.log(error);
     });
+  }
+
+  getXorO(playerName){
+    if(playerName === this.state.playerX){
+      return "X";
+    } else if(playerName === this.state.playerO){
+      return "O";
+    }
+
+    return null;
+  }
+
+  handleGameMove = (position) => {
+    var currentMove = this.state.playerX;
+    if(this.state.move){
+      currentMove = this.state.move;
+    }
+    var self = this;
+    axios.post('http://localhost:4444/gamestate/move', { 
+      id: this.state.gameId,
+      player: currentMove,
+      position: position,
+    })
+    .then(function (response) {
+      if(response.data.error){
+        alert(response.data.error);
+        return;
+      }
+
+      if(response.data.winner){
+        alert(response.data.winner + ' is the winner!');
+        return;
+      }
+
+      self.setState(state => ({
+        playerX: response.data.playerA,
+        playerO: response.data.playerB,
+        move: response.data.move,
+        a0: self.getXorO(response.data.board.board.a0),
+        a1: self.getXorO(response.data.board.board.a1),
+        a2: self.getXorO(response.data.board.board.a2),
+        b0: self.getXorO(response.data.board.board.b0),
+        b1: self.getXorO(response.data.board.board.b1),
+        b2: self.getXorO(response.data.board.board.b2),
+        c0: self.getXorO(response.data.board.board.c0),
+        c1: self.getXorO(response.data.board.board.c1),
+        c2: self.getXorO(response.data.board.board.c2), 
+      }));
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  updatePlayerXInput(evt){
+    let value = evt.target.value; 
+    this.setState(state => ({
+      playerX: value
+    }));  
+  }
+
+  updatePlayerOInput(evt){
+    let value = evt.target.value;
+    this.setState(state => ({
+      playerO: value
+    })); 
   }
 
   componentDidMount() {
@@ -71,11 +159,14 @@ asdfasdf
       <div className="page-wrapper" style={{height : this.state.height}}>
         <div className="content" style={{height : this.state.height, width: this.state.contentWidth}}> 
           <h1 className="title">Tic Tac Toe</h1> 
+          <div className="subTitle">Stephen Hiehn technical assignment</div>
 
           <div id="playerNameInputPanel" className={this.state.displayGameInit ? '' : 'hidden'}>
             <span className="inputTitle">Enter player's Names:</span><br />
-            <label className="inputLabels">X: </label><input name="gender" id="xplayer" className="inputFields" /><br/>
-            <label className="inputLabels">O: </label><input name="gender" id="oplayer" className="inputFields"/><br/>
+            <form>
+              <label className="inputLabels">X: </label><input name="gender" id="xplayer" className="inputFields" onChange={this.updatePlayerXInput} /><br/>
+              <label className="inputLabels">O: </label><input name="gender" id="oplayer" className="inputFields" onChange={this.updatePlayerOInput} /><br/>
+            </form>
             <div className="inputButtonWrapper">
               <button onClick={this.handleGameInit} className="inputButton">
               START
@@ -86,28 +177,31 @@ asdfasdf
             <table id="board" className={this.props.showBoard ? 'hidden' : ''} style={{height : this.state.contentWidth, width: this.state.contentWidth}}>
               <tbody>
                 <tr>
-                  <td>{this.state.a0}</td>
-                  <td>{this.state.a1}</td>
-                  <td>{this.state.a2}</td>
+                  <td onClick={() => this.handleGameMove('a0')}>{this.state.a0}</td>
+                  <td onClick={() => this.handleGameMove('a1')}>{this.state.a1}</td>
+                  <td onClick={() => this.handleGameMove('a2')}>{this.state.a2}</td>
                 </tr>
                 <tr>
-                  <td>{this.state.b0}</td>
-                  <td>{this.state.b1}</td>
-                  <td>{this.state.b2}</td>
+                  <td onClick={() => this.handleGameMove('b0')}>{this.state.b0}</td>
+                  <td onClick={() => this.handleGameMove('b1')}>{this.state.b1}</td>
+                  <td onClick={() => this.handleGameMove('b2')}>{this.state.b2}</td>
                 </tr>
                 <tr>
-                  <td>{this.state.c0}</td>
-                  <td>{this.state.c1}</td>
-                  <td>{this.state.c2}</td>
+                  <td onClick={() => this.handleGameMove('c0')}>{this.state.c0}</td>
+                  <td onClick={() => this.handleGameMove('c1')}>{this.state.c1}</td>
+                  <td onClick={() => this.handleGameMove('c2')}>{this.state.c2}</td>
                 </tr>
               </tbody>
             </table> 
+ 
+            <div id="playerTurnMsg" className={!this.state.displayGameInit ? '' : 'hidden'}>
+              Its <b>{this.state.move}</b>'s turn
+            </div>
 
         </div> 
       </div>
     );
   }
 }
- 
-//http://54.188.130.104:4444/gamestate/15878913-77db-479f-b5af-d89e56c70414
+  
 export default App;

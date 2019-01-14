@@ -32,15 +32,13 @@ public class GameBoardTest {
         assertThat(updatedBoard.get("a2")).isEqualToIgnoringCase("playerA");
     }
 
-    @Test
+    @Test(expected = RuntimeException.class)
     public void doesNotUpdateBoardWhenPositionAlreadyTaken(){
         setup();
 
         assertThat(board.getBoard().put("a2", "playerB")).isNull();
 
         HashMap<String, String> updatedBoard = board.update("playerA", "a2");
-        assertThat(updatedBoard.get("a2")).isNotNull();
-        assertThat(updatedBoard.get("a2")).isEqualToIgnoringCase("playerB");
     }
 
     @Test

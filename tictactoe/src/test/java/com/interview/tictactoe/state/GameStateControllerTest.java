@@ -58,6 +58,11 @@ public class GameStateControllerTest {
     }
 
     @Test
+    public void shouldReturnErrorIfMoveIsInvalid(){
+
+    }
+
+    @Test
     public void shouldReturnErrorMessageIfWrongPlayerMoved(){
         GameStateService mockedService = mock(GameStateService.class);
 
