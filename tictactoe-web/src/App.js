@@ -41,7 +41,8 @@ class App extends Component {
       let update_content_width = window.innerWidth * 0.7;
       if(update_content_width > 700){
         update_content_width = 700;
-      }
+      } 
+      
       this.setState({ width: update_width, height: update_height, contentWidth: update_content_width });
   }
 

@@ -117,6 +117,7 @@ form label{
 }
 
 #board { 
+  min-height: 500px;
 }
 
 table {
