@@ -55,6 +55,7 @@ code {
   background-color: aliceblue;
   border: 2px solid green;
   min-height: 220px;
+  min-width: 250px;
 }
 
 .inputTitle {
