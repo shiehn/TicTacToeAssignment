@@ -1,6 +1,6 @@
 package com.interview.tictactoe.dal;
 
-import com.interview.tictactoe.state.GameState;
+import com.interview.tictactoe.GameState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

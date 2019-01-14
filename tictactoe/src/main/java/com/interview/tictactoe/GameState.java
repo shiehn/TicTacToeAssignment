@@ -1,6 +1,5 @@
-package com.interview.tictactoe.state;
+package com.interview.tictactoe;
 
-import com.interview.tictactoe.state.models.GameBoard;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.interview.tictactoe.state.models;
+package com.interview.tictactoe;
 
 import java.io.Serializable;
 import java.util.ArrayList;

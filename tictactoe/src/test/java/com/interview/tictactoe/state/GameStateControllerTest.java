@@ -1,8 +1,11 @@
 package com.interview.tictactoe.state;
 
+import com.interview.tictactoe.GameState;
+import com.interview.tictactoe.controllers.GameStateController;
 import com.interview.tictactoe.dal.GameStateService;
-import com.interview.tictactoe.state.models.GameInitRequest;
-import com.interview.tictactoe.state.models.GameMoveRequest;
+import com.interview.tictactoe.identity.Identity;
+import com.interview.tictactoe.models.GameInitRequest;
+import com.interview.tictactoe.models.GameMoveRequest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +17,7 @@ public class GameStateControllerTest {
 
     @Test
     public void shouldReturnErrorIfNamesNotProvided(){
-        GameStateController gameStateController = new GameStateController(null);
+        GameStateController gameStateController = new GameStateController(null, new Identity());
 
         GameInitRequest gameInitRequest = new GameInitRequest();
         gameInitRequest.setPlayera("playerA");
@@ -31,7 +34,7 @@ public class GameStateControllerTest {
 
         when(mockedService.findById(any())).thenReturn(null);
 
-        GameStateController gameStateController = new GameStateController(mockedService);
+        GameStateController gameStateController = new GameStateController(mockedService, new Identity());
 
         GameMoveRequest gameMoveRequest = new GameMoveRequest("bogusId", "playerA", "c0");
         GameState gameState = gameStateController.move(gameMoveRequest);
@@ -48,7 +51,7 @@ public class GameStateControllerTest {
         gameStateMock.setCompleted(true);
         when(mockedService.findById(any())).thenReturn(gameStateMock);
 
-        GameStateController gameStateController = new GameStateController(mockedService);
+        GameStateController gameStateController = new GameStateController(mockedService, new Identity());
 
         GameMoveRequest gameMoveRequest = new GameMoveRequest("bogusId", "playerA", "c0");
         GameState gameState = gameStateController.move(gameMoveRequest);
@@ -70,7 +73,7 @@ public class GameStateControllerTest {
         gameStateMock.setMove("playerB");
         when(mockedService.findById(any())).thenReturn(gameStateMock);
 
-        GameStateController gameStateController = new GameStateController(mockedService);
+        GameStateController gameStateController = new GameStateController(mockedService, new Identity());
 
         GameMoveRequest gameMoveRequest = new GameMoveRequest("bogusId", "playerA", "c0");
         GameState gameState = gameStateController.move(gameMoveRequest);

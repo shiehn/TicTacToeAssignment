@@ -1,4 +1,4 @@
-package com.interview.tictactoe.state.models;
+package com.interview.tictactoe.models;
 
 public class GameMoveRequest {
     private String id;

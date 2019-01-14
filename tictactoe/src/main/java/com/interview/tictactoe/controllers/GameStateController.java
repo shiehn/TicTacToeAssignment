@@ -1,8 +1,10 @@
-package com.interview.tictactoe.state;
+package com.interview.tictactoe.controllers;
 
 import com.interview.tictactoe.dal.GameStateService;
-import com.interview.tictactoe.state.models.GameInitRequest;
-import com.interview.tictactoe.state.models.GameMoveRequest;
+import com.interview.tictactoe.GameState;
+import com.interview.tictactoe.identity.Identity;
+import com.interview.tictactoe.models.GameInitRequest;
+import com.interview.tictactoe.models.GameMoveRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +13,20 @@ import org.springframework.web.bind.annotation.*;
 public class GameStateController {
 
     GameStateService gameStateService;
+    Identity identity;
 
     @Autowired
-    public GameStateController(GameStateService gameStateService){
+    public GameStateController(GameStateService gameStateService, Identity identity){
         this.gameStateService = gameStateService;
+        this.identity = identity;
     }
 
     @CrossOrigin(origins = "*")
     @PostMapping("/gamestate/init")
     @ResponseBody
     public GameState init(@RequestBody GameInitRequest gameInitRequest){
+        identity.validateToken("placeholder-token");
+
         GameState gameState = new GameState(
                 gameInitRequest.getPlayera(), gameInitRequest.getPlayerb());
 
@@ -41,6 +47,8 @@ public class GameStateController {
     @PostMapping("/gamestate/move")
     @ResponseBody
     public GameState move(@RequestBody GameMoveRequest gameMoveRequest) {
+        identity.validateToken("placeholder-token");
+
         GameState retrievedState = gameStateService.findById(gameMoveRequest.getId());
 
         if(retrievedState == null){
@@ -87,6 +95,8 @@ public class GameStateController {
     @GetMapping("/gamestate/{id}")
     @ResponseBody
     public GameState get(@PathVariable(name="id", required=true) String id) {
+        identity.validateToken("placeholder-token");
+
         GameState retrieved = gameStateService.findById(id);
         return retrieved;
     }

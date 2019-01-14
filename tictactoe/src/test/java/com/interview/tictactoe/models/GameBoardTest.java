@@ -1,5 +1,6 @@
-package com.interview.tictactoe.state.models;
+package com.interview.tictactoe.models;
 
+import com.interview.tictactoe.GameBoard;
 import org.junit.Test;
 
 import java.util.HashMap;
